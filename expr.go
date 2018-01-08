@@ -63,11 +63,15 @@ func (es exprs) AppendToSql(w io.Writer, sep string, args []interface{}) ([]inte
 				return nil, err
 			}
 		}
-		_, err := io.WriteString(w, e.sql)
+		eSql, eArgs, err := e.ToSql()
 		if err != nil {
 			return nil, err
 		}
-		args = append(args, e.args...)
+		_, err = io.WriteString(w, eSql)
+		if err != nil {
+			return nil, err
+		}
+		args = append(args, eArgs...)
 	}
 	return args, nil
 }
